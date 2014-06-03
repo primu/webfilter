@@ -26,7 +26,6 @@ public:
 		TextWriter::Write(value);
 		delegat^ del = gcnew delegat(this,&ConsoleTextWriter::zmien);
 		_output->BeginInvoke(del,value);
-		//_output->AppendText(value.ToString());
 	}
 	void zmien(Char^ t)
 	{

@@ -127,7 +127,8 @@ void Strona::czyPoprawna(char* url)
 	char* wrc = "(^((([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)|\\*\\.)+(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])|\\*)$)|(^[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]$)";
 	std::regex wr(wrc);
 	if(regex_match(url,wr))
-		printf("%s - OK\n",url);
+		Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(url)+" - OK\n");
+		//printf("%s - OK\n",url);
 	else throw -1;
 
 	

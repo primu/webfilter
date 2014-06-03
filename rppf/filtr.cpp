@@ -9,6 +9,8 @@ filtr::filtr()
 {
 	strony = new std::vector<Strona>();
 	uruchomiony=false;
+	ileZablokowano=0;
+	//ileAktywnych=0;
 }
 bool filtr::FCzyUruchomiony()
 {
@@ -38,6 +40,7 @@ void filtr::FDodajStrone(Strona strona)
 	strony->push_back(strona);
 	std::sort(strony->rbegin(),strony->rend());
 	Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(strona.pobierzUrl())+" - Dodano wpis!\n");
+	//ileAktywnych++;
 	//printf("Posortowane!");
 }
 void filtr::FUruchom()
@@ -56,7 +59,7 @@ void filtr::FUruchom()
     "\t<body>\n"
     "\t\t<h1>Strona zablokowana!</h1>\n"
     "\t\t<hr>\n"
-    "\t\t<p>Rafa³ zablokowa³ Ci dan¹ stronê! Sorry!</p>\n"
+    "\t\t<p>Rafa³ i Przemek zablokowali Ci dan¹ stronê! Sorry!</p>\n"
     "\t</body>\n"
     "</html>\n";
 
@@ -287,12 +290,13 @@ bool filtr::DopasujStrone(char * dane, UINT16 dlugosc)
 		domena[tempDl]='\0';
 	}
 
-
+	
 	//printf("\nDomena: %s\n",domena);
 	if(WyszukajRE(domena,uri))
 	{
 		Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(domena) + " - zablokowano!\n");
 		//printf("Zablokowano!");
+		this->ileZablokowano++;
 	}else
 	{
 		return false;
@@ -352,6 +356,8 @@ bool filtr::FUsunStrone(char* adres)
 	}
 	if(znaleziono)
 	{
+		/*if(temp->czyAktywna())
+			ileAktywnych--;*/
 		strony->erase(temp);	
 	}
 	//std::sort(strony->rbegin(),strony->rend());
@@ -372,7 +378,7 @@ bool filtr::WyszukajRE(char* domena, char* uri)
 			{
 				znaleziono=std::regex_search(uri, wr);
 			}
-			if(!it->czyAktywna())
+			if(!it->czyAktywna() && znaleziono)
 			{
 				aktywna=false;
 			}
@@ -444,10 +450,11 @@ void filtr::WczytajPlik() //tymczasowe rozwi¹zanie
 			char* output = new char[sizeof(myReadFile)];
 			myReadFile.getline(output,sizeof(myReadFile));
 			Strona* str = new Strona(output,output);
+			//ileAktywnych++;
 			str->utworzRegex();
 			strony->push_back(*str);
 			//printf("%s\n",strony->at(j).pobierzUrl());
-			Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(strony->at(j).pobierzUrl())+"\n");
+			//Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(strony->at(j).pobierzUrl())+"\n");
 			j++;
 		}
 	}
@@ -464,10 +471,16 @@ void filtr::FAktywujStrone(bool a, char* adres)
 			znaleziono=true;
 			it->ustawJakoAktywna(a);
 			if(a)
+			{
 				//printf("%s - aktywna\n",it->pobierzUrl());
-					Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(it->pobierzUrl())+" - aktywna\n");
+				//this->ileAktywnych++;
+				Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(it->pobierzUrl())+" - aktywna\n");
+			}
 			else
-				Console::Write(gcnew String(it->pobierzUrl())+" - nieaktywna\n");
+			{
+				Console::Write(System::DateTime::Now.ToString("[yyyy-MM-dd HH:mm:ss]")+" "+gcnew String(it->pobierzUrl())+" - nieaktywna\n");
+				//this->ileAktywnych--;
+			}
 				//printf("%s - nieaktywna\n",it->pobierzUrl());
 		}
 	}
@@ -483,4 +496,15 @@ bool filtr::czyIstnieje(char* adres)
 		}
 	}
 	return false;
+}
+
+int filtr::FileAktywnych()
+{
+	int ileAktywnych=0;
+	for(std::vector<Strona>::iterator it = strony->begin();it!=strony->end();it++)
+	{
+		if(it->czyAktywna())
+			ileAktywnych++;
+	}
+	return ileAktywnych;
 }

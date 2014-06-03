@@ -1,5 +1,6 @@
 #include <string>
 #include <regex>
+using namespace System;
 public class Strona
 
 {
