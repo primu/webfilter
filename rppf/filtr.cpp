@@ -449,7 +449,7 @@ void filtr::WczytajPlik() //tymczasowe rozwi¹zanie
 		while (!myReadFile.eof()) {
 			char* output = new char[sizeof(myReadFile)];
 			myReadFile.getline(output,sizeof(myReadFile));
-			Strona* str = new Strona(output,output);
+			Strona* str = new Strona(output);
 			//ileAktywnych++;
 			str->utworzRegex();
 			strony->push_back(*str);
@@ -508,3 +508,12 @@ int filtr::FileAktywnych()
 	}
 	return ileAktywnych;
 }
+
+void filtr::ZapiszDoPliku()
+{
+	BazaDanych^ baza = gcnew BazaDanych("log.dat");
+
+	baza->ZapiszListeStron(strony);
+	vector<Strona> *sssss = baza->OdczytajListeStron();
+}
+

@@ -2,15 +2,12 @@
 #include <regex>
 using namespace System;
 public class Strona
-
 {
 public:
-	Strona
-();
-	~Strona
-();
+	Strona();
+	~Strona();
 
-	Strona(char* url, char* idStronyZastepczej=nullptr);
+	Strona(char* url);
 
 	char* pobierzUrl();
 	char* pobierzRegexp();

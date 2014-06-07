@@ -11,8 +11,9 @@
 
 #include "windivert.h"
 #include <regex>
-#include "Strona.h"
+//#include "Strona.h"
 #include "StronaZastepcza.h"
+#include "BazaDanych.h"
 
 #define MAXBUF 0xFFFF
 
@@ -67,5 +68,6 @@ public:
 	void FDodajStrone(Strona strona);
 	bool FUsunStrone(char* strona);
 	void FAktywujStrone(bool a, char* adres);
+	void ZapiszDoPliku();
 };
 

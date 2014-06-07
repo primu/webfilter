@@ -104,7 +104,7 @@ void Strona::utworzRegex()
 	}
 }
 
-Strona::Strona(char* url, char* idStronyZastepczej)
+Strona::Strona(char* url)
 {
 	try
 	{
@@ -116,10 +116,6 @@ Strona::Strona(char* url, char* idStronyZastepczej)
 	this->url=url;
 	this->aktywna=true;
 	this->regexp = nullptr;
-	if(idStronyZastepczej==nullptr)
-		this->idStronyZastepczej = nullptr;
-	else
-		this->idStronyZastepczej=idStronyZastepczej;
 }
 
 void Strona::czyPoprawna(char* url)

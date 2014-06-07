@@ -2,6 +2,9 @@
 #include "filtr.h"
 #include "NowaStrona.h"
 #include "ConsoleTextWriter.h"
+#include "PasswordHash.h"
+#include "MyForm.h"
+#include "OknoHasla2.h"
 
 namespace rppf {
 
@@ -24,7 +27,8 @@ namespace rppf {
 		OknoGlowne(void)
 		{
 			InitializeComponent();
-
+			odblokowane=true;
+			hash=String::Empty;
 			gui=true;
 			
 			//
@@ -77,9 +81,120 @@ namespace rppf {
 	private: System::Windows::Forms::Label^  LLiczbaAStron;
 	private: System::Windows::Forms::Label^  LLiczbaS;
 	private: System::Windows::Forms::Label^  LLiczbaZStron;
+	private: System::Windows::Forms::Button^  button1;
+	private: System::Windows::Forms::GroupBox^  groupBox2;
+	private: System::Windows::Forms::ListView^  LVStronyZ;
+
+
+	private: System::Windows::Forms::Label^  label13;
+	private: System::Windows::Forms::RadioButton^  RBWlasna;
+	private: System::Windows::Forms::RadioButton^  RBDomyslna;
+	private: System::Windows::Forms::GroupBox^  groupBox1;
+	private: System::Windows::Forms::ColumnHeader^  CHNazwa;
+	private: System::Windows::Forms::Button^  BUsunStroneZ;
+	private: System::Windows::Forms::Button^  BDodajStroneZ;
+	private: System::Windows::Forms::Button^  BUsunHaslo;
+	private: System::Windows::Forms::Button^  BHaslo;
 	private: System::Windows::Forms::Label^  label1;
 
 	private:
+		String^ hash;
+	private: System::Windows::Forms::Button^  BOdblokuj;
+			 bool odblokowane;
+
+		String^ PobierzHaslo()
+		{
+			MyForm^ a = gcnew MyForm();
+			a->ShowDialog();
+			String^ b = a->zwrocHaslo();
+			a->Close();
+			return b;
+		}
+		bool SprawdzHaslo(String^ haslo)
+		{
+			PasswordHash^ gen = gcnew PasswordHash();
+			if(!String::IsNullOrEmpty(hash))
+			{
+				if(!String::IsNullOrEmpty(haslo))
+				{
+					if(gen->ValidatePassword(haslo,hash))
+					{
+						return true;
+					}
+					MessageBox::Show("B³êdne has³o!");
+				}
+				return false;
+			}
+			return true;
+		}
+
+		void ZablokujInterfejs()
+		{
+			odblokowane=false;
+			BUruchom->Enabled=false;
+			BZatrzymaj->Enabled=false;
+			TPStrony->Enabled=false;
+			TPUstawienia->Enabled=false;
+		}
+		void OdblokujInterfejs()
+		{
+			odblokowane=true;
+			if(silnik->FCzyUruchomiony())
+				BZatrzymaj->Enabled=true;
+			else
+				BUruchom->Enabled=true;
+			TPStrony->Enabled=true;
+			TPUstawienia->Enabled=true;
+		}
+
+		bool UtworzHaslo(String^ haslo)
+		{
+			PasswordHash^ gen = gcnew PasswordHash();
+			if(String::IsNullOrEmpty(hash))
+			{
+				if(!String::IsNullOrEmpty(haslo))
+				{
+					hash = gen->CreateHash(haslo);
+					MessageBox::Show("Utworzono has³o!");
+					return true;
+				}
+			}
+			else
+			{
+				/*if(gen->ValidatePassword(haslo,hash))
+				{*/
+					hash = gen->CreateHash(haslo);
+					MessageBox::Show("Has³o zosta³o zmienione!");
+					return true;
+				/*}
+				else
+				{
+					MessageBox::Show("B³êdne has³o!");
+					return false;
+				}*/
+			}
+			return false;
+		}
+		void UsunHaslo(String^ haslo)
+		{
+			PasswordHash^ gen = gcnew PasswordHash();
+			if(!String::IsNullOrEmpty(haslo))
+			{
+				if(!String::IsNullOrEmpty(hash))
+				{
+					if(gen->ValidatePassword(haslo,hash))
+					{
+						hash = String::Empty;
+						MessageBox::Show("Has³o usuniête!");
+					}
+					else
+					{
+						MessageBox::Show("B³êdne has³o!");
+					}
+				}
+			}
+		}
+
 		delegate void AktualizujRTB(TextWriter^ ctw);
 		void zmien(RichTextBox^ rtb, String^ wartosc)
 		{
@@ -132,6 +247,7 @@ namespace rppf {
 			this->splitContainer5 = (gcnew System::Windows::Forms::SplitContainer());
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->BOdblokuj = (gcnew System::Windows::Forms::Button());
 			this->LLiczbaAStron = (gcnew System::Windows::Forms::Label());
 			this->LLiczbaS = (gcnew System::Windows::Forms::Label());
 			this->LLiczbaZStron = (gcnew System::Windows::Forms::Label());
@@ -156,6 +272,18 @@ namespace rppf {
 			this->splitContainer4 = (gcnew System::Windows::Forms::SplitContainer());
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->groupBox2 = (gcnew System::Windows::Forms::GroupBox());
+			this->BUsunStroneZ = (gcnew System::Windows::Forms::Button());
+			this->BDodajStroneZ = (gcnew System::Windows::Forms::Button());
+			this->LVStronyZ = (gcnew System::Windows::Forms::ListView());
+			this->CHNazwa = (gcnew System::Windows::Forms::ColumnHeader());
+			this->label13 = (gcnew System::Windows::Forms::Label());
+			this->RBWlasna = (gcnew System::Windows::Forms::RadioButton());
+			this->RBDomyslna = (gcnew System::Windows::Forms::RadioButton());
+			this->groupBox1 = (gcnew System::Windows::Forms::GroupBox());
+			this->BUsunHaslo = (gcnew System::Windows::Forms::Button());
+			this->BHaslo = (gcnew System::Windows::Forms::Button());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->TPLog = (gcnew System::Windows::Forms::TabPage());
 			this->splitContainer3 = (gcnew System::Windows::Forms::SplitContainer());
 			this->label4 = (gcnew System::Windows::Forms::Label());
@@ -179,7 +307,10 @@ namespace rppf {
 			this->TPUstawienia->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer4))->BeginInit();
 			this->splitContainer4->Panel1->SuspendLayout();
+			this->splitContainer4->Panel2->SuspendLayout();
 			this->splitContainer4->SuspendLayout();
+			this->groupBox2->SuspendLayout();
+			this->groupBox1->SuspendLayout();
 			this->TPLog->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer3))->BeginInit();
 			this->splitContainer3->Panel1->SuspendLayout();
@@ -205,6 +336,7 @@ namespace rppf {
 			// 
 			// TPOgolne
 			// 
+			this->TPOgolne->BackColor = System::Drawing::Color::White;
 			this->TPOgolne->Controls->Add(this->splitContainer5);
 			this->TPOgolne->Location = System::Drawing::Point(23, 4);
 			this->TPOgolne->Name = L"TPOgolne";
@@ -212,7 +344,6 @@ namespace rppf {
 			this->TPOgolne->Size = System::Drawing::Size(635, 501);
 			this->TPOgolne->TabIndex = 0;
 			this->TPOgolne->Text = L"Ogolne";
-			this->TPOgolne->UseVisualStyleBackColor = true;
 			// 
 			// splitContainer5
 			// 
@@ -229,6 +360,7 @@ namespace rppf {
 			// splitContainer5.Panel2
 			// 
 			this->splitContainer5->Panel2->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->splitContainer5->Panel2->Controls->Add(this->BOdblokuj);
 			this->splitContainer5->Panel2->Controls->Add(this->LLiczbaAStron);
 			this->splitContainer5->Panel2->Controls->Add(this->LLiczbaS);
 			this->splitContainer5->Panel2->Controls->Add(this->LLiczbaZStron);
@@ -262,6 +394,17 @@ namespace rppf {
 			this->label9->Size = System::Drawing::Size(101, 31);
 			this->label9->TabIndex = 2;
 			this->label9->Text = L"Ogólne";
+			// 
+			// BOdblokuj
+			// 
+			this->BOdblokuj->Location = System::Drawing::Point(558, 345);
+			this->BOdblokuj->Name = L"BOdblokuj";
+			this->BOdblokuj->Size = System::Drawing::Size(65, 53);
+			this->BOdblokuj->TabIndex = 7;
+			this->BOdblokuj->Text = L"Odblokuj";
+			this->BOdblokuj->UseVisualStyleBackColor = true;
+			this->BOdblokuj->Visible = false;
+			this->BOdblokuj->Click += gcnew System::EventHandler(this, &OknoGlowne::BOdblokuj_Click);
 			// 
 			// LLiczbaAStron
 			// 
@@ -375,6 +518,7 @@ namespace rppf {
 			// 
 			// TPStrony
 			// 
+			this->TPStrony->BackColor = System::Drawing::Color::White;
 			this->TPStrony->Controls->Add(this->splitContainer1);
 			this->TPStrony->Location = System::Drawing::Point(23, 4);
 			this->TPStrony->Name = L"TPStrony";
@@ -382,7 +526,6 @@ namespace rppf {
 			this->TPStrony->Size = System::Drawing::Size(635, 501);
 			this->TPStrony->TabIndex = 1;
 			this->TPStrony->Text = L"Strony";
-			this->TPStrony->UseVisualStyleBackColor = true;
 			// 
 			// splitContainer1
 			// 
@@ -496,6 +639,7 @@ namespace rppf {
 			// 
 			// TPUstawienia
 			// 
+			this->TPUstawienia->BackColor = System::Drawing::Color::White;
 			this->TPUstawienia->Controls->Add(this->splitContainer4);
 			this->TPUstawienia->Location = System::Drawing::Point(23, 4);
 			this->TPUstawienia->Name = L"TPUstawienia";
@@ -503,7 +647,6 @@ namespace rppf {
 			this->TPUstawienia->Size = System::Drawing::Size(635, 501);
 			this->TPUstawienia->TabIndex = 3;
 			this->TPUstawienia->Text = L"Ustawienia";
-			this->TPUstawienia->UseVisualStyleBackColor = true;
 			// 
 			// splitContainer4
 			// 
@@ -520,6 +663,9 @@ namespace rppf {
 			// splitContainer4.Panel2
 			// 
 			this->splitContainer4->Panel2->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->splitContainer4->Panel2->Controls->Add(this->groupBox2);
+			this->splitContainer4->Panel2->Controls->Add(this->groupBox1);
+			this->splitContainer4->Panel2->Controls->Add(this->button1);
 			this->splitContainer4->Size = System::Drawing::Size(629, 495);
 			this->splitContainer4->SplitterDistance = 88;
 			this->splitContainer4->TabIndex = 0;
@@ -544,15 +690,143 @@ namespace rppf {
 			this->label7->TabIndex = 2;
 			this->label7->Text = L"Ustawienia";
 			// 
+			// groupBox2
+			// 
+			this->groupBox2->Controls->Add(this->BUsunStroneZ);
+			this->groupBox2->Controls->Add(this->BDodajStroneZ);
+			this->groupBox2->Controls->Add(this->LVStronyZ);
+			this->groupBox2->Controls->Add(this->label13);
+			this->groupBox2->Controls->Add(this->RBWlasna);
+			this->groupBox2->Controls->Add(this->RBDomyslna);
+			this->groupBox2->Location = System::Drawing::Point(6, 3);
+			this->groupBox2->Name = L"groupBox2";
+			this->groupBox2->Size = System::Drawing::Size(338, 397);
+			this->groupBox2->TabIndex = 1;
+			this->groupBox2->TabStop = false;
+			this->groupBox2->Text = L"Strona zastêpcza";
+			// 
+			// BUsunStroneZ
+			// 
+			this->BUsunStroneZ->Enabled = false;
+			this->BUsunStroneZ->Location = System::Drawing::Point(223, 356);
+			this->BUsunStroneZ->Name = L"BUsunStroneZ";
+			this->BUsunStroneZ->Size = System::Drawing::Size(109, 35);
+			this->BUsunStroneZ->TabIndex = 3;
+			this->BUsunStroneZ->Text = L"Usuñ stronê";
+			this->BUsunStroneZ->UseVisualStyleBackColor = true;
+			// 
+			// BDodajStroneZ
+			// 
+			this->BDodajStroneZ->Enabled = false;
+			this->BDodajStroneZ->Location = System::Drawing::Point(6, 356);
+			this->BDodajStroneZ->Name = L"BDodajStroneZ";
+			this->BDodajStroneZ->Size = System::Drawing::Size(211, 35);
+			this->BDodajStroneZ->TabIndex = 3;
+			this->BDodajStroneZ->Text = L"Dodaj stronê";
+			this->BDodajStroneZ->UseVisualStyleBackColor = true;
+			// 
+			// LVStronyZ
+			// 
+			this->LVStronyZ->Columns->AddRange(gcnew cli::array< System::Windows::Forms::ColumnHeader^  >(1) {this->CHNazwa});
+			this->LVStronyZ->Enabled = false;
+			this->LVStronyZ->GridLines = true;
+			this->LVStronyZ->HeaderStyle = System::Windows::Forms::ColumnHeaderStyle::Nonclickable;
+			this->LVStronyZ->HideSelection = false;
+			this->LVStronyZ->Location = System::Drawing::Point(10, 83);
+			this->LVStronyZ->MultiSelect = false;
+			this->LVStronyZ->Name = L"LVStronyZ";
+			this->LVStronyZ->Size = System::Drawing::Size(322, 266);
+			this->LVStronyZ->TabIndex = 2;
+			this->LVStronyZ->UseCompatibleStateImageBehavior = false;
+			this->LVStronyZ->View = System::Windows::Forms::View::Details;
+			// 
+			// CHNazwa
+			// 
+			this->CHNazwa->Text = L"Nazwa";
+			this->CHNazwa->Width = 316;
+			// 
+			// label13
+			// 
+			this->label13->AutoSize = true;
+			this->label13->Location = System::Drawing::Point(7, 20);
+			this->label13->Name = L"label13";
+			this->label13->Size = System::Drawing::Size(205, 13);
+			this->label13->TabIndex = 1;
+			this->label13->Text = L"Wybierz stronê wysy³an¹ do u¿ytkownika:";
+			// 
+			// RBWlasna
+			// 
+			this->RBWlasna->AutoSize = true;
+			this->RBWlasna->Location = System::Drawing::Point(10, 59);
+			this->RBWlasna->Name = L"RBWlasna";
+			this->RBWlasna->Size = System::Drawing::Size(66, 17);
+			this->RBWlasna->TabIndex = 0;
+			this->RBWlasna->Text = L"W³asna:";
+			this->RBWlasna->UseVisualStyleBackColor = true;
+			// 
+			// RBDomyslna
+			// 
+			this->RBDomyslna->AutoSize = true;
+			this->RBDomyslna->Checked = true;
+			this->RBDomyslna->Location = System::Drawing::Point(10, 36);
+			this->RBDomyslna->Name = L"RBDomyslna";
+			this->RBDomyslna->Size = System::Drawing::Size(71, 17);
+			this->RBDomyslna->TabIndex = 0;
+			this->RBDomyslna->TabStop = true;
+			this->RBDomyslna->Text = L"Domyœlna";
+			this->RBDomyslna->UseVisualStyleBackColor = true;
+			// 
+			// groupBox1
+			// 
+			this->groupBox1->Controls->Add(this->BUsunHaslo);
+			this->groupBox1->Controls->Add(this->BHaslo);
+			this->groupBox1->Location = System::Drawing::Point(350, 3);
+			this->groupBox1->Name = L"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(273, 105);
+			this->groupBox1->TabIndex = 1;
+			this->groupBox1->TabStop = false;
+			this->groupBox1->Text = L"Has³o administratora";
+			// 
+			// BUsunHaslo
+			// 
+			this->BUsunHaslo->Location = System::Drawing::Point(6, 59);
+			this->BUsunHaslo->Name = L"BUsunHaslo";
+			this->BUsunHaslo->Size = System::Drawing::Size(261, 35);
+			this->BUsunHaslo->TabIndex = 3;
+			this->BUsunHaslo->Text = L"Usuñ has³o";
+			this->BUsunHaslo->UseVisualStyleBackColor = true;
+			this->BUsunHaslo->Click += gcnew System::EventHandler(this, &OknoGlowne::BUsunHaslo_Click);
+			// 
+			// BHaslo
+			// 
+			this->BHaslo->Location = System::Drawing::Point(6, 18);
+			this->BHaslo->Name = L"BHaslo";
+			this->BHaslo->Size = System::Drawing::Size(261, 35);
+			this->BHaslo->TabIndex = 3;
+			this->BHaslo->Text = L"Utwórz/Zmieñ has³o";
+			this->BHaslo->UseVisualStyleBackColor = true;
+			this->BHaslo->Click += gcnew System::EventHandler(this, &OknoGlowne::BHaslo_Click);
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(495, 364);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(111, 23);
+			this->button1->TabIndex = 0;
+			this->button1->Text = L"Test bazy danych";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Visible = false;
+			this->button1->Click += gcnew System::EventHandler(this, &OknoGlowne::button1_Click);
+			// 
 			// TPLog
 			// 
+			this->TPLog->BackColor = System::Drawing::Color::White;
 			this->TPLog->Controls->Add(this->splitContainer3);
 			this->TPLog->Location = System::Drawing::Point(23, 4);
 			this->TPLog->Name = L"TPLog";
 			this->TPLog->Size = System::Drawing::Size(635, 501);
 			this->TPLog->TabIndex = 2;
 			this->TPLog->Text = L"Log";
-			this->TPLog->UseVisualStyleBackColor = true;
 			// 
 			// splitContainer3
 			// 
@@ -634,8 +908,12 @@ namespace rppf {
 			this->TPUstawienia->ResumeLayout(false);
 			this->splitContainer4->Panel1->ResumeLayout(false);
 			this->splitContainer4->Panel1->PerformLayout();
+			this->splitContainer4->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer4))->EndInit();
 			this->splitContainer4->ResumeLayout(false);
+			this->groupBox2->ResumeLayout(false);
+			this->groupBox2->PerformLayout();
+			this->groupBox1->ResumeLayout(false);
 			this->TPLog->ResumeLayout(false);
 			this->splitContainer3->Panel1->ResumeLayout(false);
 			this->splitContainer3->Panel1->PerformLayout();
@@ -672,6 +950,16 @@ namespace rppf {
 					 LInfo->ForeColor=Color::DarkRed;
 					 BUruchom->Enabled=true;
 					 BZatrzymaj->Enabled=false;
+				 }
+				 if(String::IsNullOrEmpty(hash))
+				 {
+					 OdblokujInterfejs();
+				 }else
+				 {
+					 if(!SprawdzHaslo(PobierzHaslo()))
+						ZablokujInterfejs();
+					 else
+						 OdblokujInterfejs();
 				 }
 			 }
 private: System::Void BUruchom_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -792,6 +1080,74 @@ private: System::Void OknoGlowne_FormClosed(System::Object^  sender, System::Win
 private: System::Void tabControl1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
 			 if(tabControl1->SelectedTab==tabControl1->TabPages["TPOgolne"])
 				 AktualizujStatystyki();
+		 }
+private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+			 silnik->ZapiszDoPliku();
+		 }
+private: System::Void BHaslo_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if(String::IsNullOrEmpty(hash))
+			 {
+				 if(UtworzHaslo(PobierzHaslo()))
+				 {
+					BOdblokuj->Visible=true;
+					BOdblokuj->Text="Zablokuj";
+				 }
+			 }else
+			 {
+				 OknoHasla2^ aa = gcnew OknoHasla2();
+				 aa->ShowDialog();
+				 String^ h = aa->ZHaslo();
+				 String^ n = aa->ZNowe();
+				 if(!String::IsNullOrEmpty(h) || !String::IsNullOrEmpty(n))
+				 {
+					 if(SprawdzHaslo(h))
+					 {
+						 if(UtworzHaslo(n))
+						 {
+							 BOdblokuj->Visible=true;
+							 BOdblokuj->Text="Zablokuj";
+						 }
+					 }
+				 }
+
+			 }
+		 }
+private: System::Void BUsunHaslo_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if(!String::IsNullOrEmpty(hash))
+			 {
+				 if(MessageBox::Show("Czy na pewno chcesz usun¹æ has³o?","Usuwanie has³a",MessageBoxButtons::YesNo,MessageBoxIcon::Question)==::DialogResult::Yes)
+				 {
+					UsunHaslo(PobierzHaslo());
+					BOdblokuj->Visible=false;
+				 }
+			 }
+		 }
+private: System::Void BOdblokuj_Click(System::Object^  sender, System::EventArgs^  e) {
+				if(String::IsNullOrEmpty(hash))
+				{
+					BOdblokuj->Visible=false;
+					BOdblokuj->Text="Zablokuj";
+					OdblokujInterfejs();
+				}else
+				{
+					if(!odblokowane)
+					{
+						if(!SprawdzHaslo(PobierzHaslo()))
+						{
+							BOdblokuj->Text="Odblokuj";
+							ZablokujInterfejs();
+						}
+						else
+						{
+							BOdblokuj->Text="Zablokuj";
+							OdblokujInterfejs();
+						}
+					}else
+					{
+						BOdblokuj->Text="Odblokuj";
+						ZablokujInterfejs();
+					}
+				}
 		 }
 };
 }

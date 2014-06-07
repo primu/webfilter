@@ -88,29 +88,45 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BazaDanych.h" />
     <ClInclude Include="ConsoleTextWriter.h" />
     <ClInclude Include="filtr.h" />
+    <ClInclude Include="MyForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="NowaStrona.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="OknoGlowne.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="OknoHasla2.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="PasswordHash.h" />
     <ClInclude Include="Strona.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StronaZastepcza.h" />
     <ClInclude Include="windivert.h" />
+    <ClInclude Include="XML\rapidxml.hpp" />
+    <ClInclude Include="XML\rapidxml_iterators.hpp" />
+    <ClInclude Include="XML\rapidxml_print.hpp" />
+    <ClInclude Include="XML\rapidxml_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
+    <ClCompile Include="BazaDanych.cpp" />
     <ClCompile Include="ConsoleTextWriter.cpp" />
     <ClCompile Include="filtr.cpp" />
+    <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="NowaStrona.cpp" />
     <ClCompile Include="OknoGlowne.cpp" />
+    <ClCompile Include="OknoHasla2.cpp" />
+    <ClCompile Include="PasswordHash.cpp" />
     <ClCompile Include="rppf.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -126,11 +142,17 @@
     <Library Include="WinDivert.lib" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MyForm.resx">
+      <DependentUpon>MyForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NowaStrona.resx">
       <DependentUpon>NowaStrona.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OknoGlowne.resx">
       <DependentUpon>OknoGlowne.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OknoHasla2.resx">
+      <DependentUpon>OknoHasla2.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
