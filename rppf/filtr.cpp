@@ -59,7 +59,7 @@ void filtr::FUruchom()
     "\t<body>\n"
     "\t\t<h1>Strona zablokowana!</h1>\n"
     "\t\t<hr>\n"
-    "\t\t<p>Rafa³ i Przemek zablokowali Ci dan¹ stronê! Sorry!</p>\n"
+    "\t\t<p>Rafa³ i Przemek zablokowali stronê! Przepraszamy!</p>\n"
     "\t</body>\n"
     "</html>\n";
 

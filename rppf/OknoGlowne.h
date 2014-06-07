@@ -1074,7 +1074,6 @@ private: System::Void LVStrony_ItemCheck(System::Object^  sender, System::Window
 private: System::Void OknoGlowne_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
 			 if(!silnik->FCzyUruchomiony())
 				silnik->FZatrzymaj();
-			 
 		 }
 
 private: System::Void tabControl1_SelectedIndexChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -1109,7 +1108,6 @@ private: System::Void BHaslo_Click(System::Object^  sender, System::EventArgs^  
 						 }
 					 }
 				 }
-
 			 }
 		 }
 private: System::Void BUsunHaslo_Click(System::Object^  sender, System::EventArgs^  e) {

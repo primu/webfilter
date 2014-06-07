@@ -72,6 +72,9 @@
     <ClInclude Include="OknoHasla2.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="OknoStronyZ.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -118,6 +121,9 @@
     <ClCompile Include="OknoHasla2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OknoStronyZ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
@@ -132,6 +138,15 @@
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
     <EmbeddedResource Include="OknoGlowne.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MyForm.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OknoHasla2.resx">
+      <Filter>Resource Files</Filter>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OknoStronyZ.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
   </ItemGroup>

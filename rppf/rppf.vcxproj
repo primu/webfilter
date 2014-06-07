@@ -73,7 +73,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies />
+      <AdditionalDependencies>ws2_32.lib</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -103,6 +103,9 @@
     <ClInclude Include="OknoHasla2.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="OknoStronyZ.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="PasswordHash.h" />
     <ClInclude Include="Strona.h" />
     <ClInclude Include="resource.h" />
@@ -126,6 +129,7 @@
     <ClCompile Include="NowaStrona.cpp" />
     <ClCompile Include="OknoGlowne.cpp" />
     <ClCompile Include="OknoHasla2.cpp" />
+    <ClCompile Include="OknoStronyZ.cpp" />
     <ClCompile Include="PasswordHash.cpp" />
     <ClCompile Include="rppf.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -153,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OknoHasla2.resx">
       <DependentUpon>OknoHasla2.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OknoStronyZ.resx">
+      <DependentUpon>OknoStronyZ.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
