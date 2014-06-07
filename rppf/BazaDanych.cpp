@@ -132,17 +132,18 @@ String^ BazaDanych::encryptXML(xml_document<>* document)//, array<Byte>^ key, ar
 
 	array<Byte>^ a1 = gcnew array<Byte>(r->KeySize/8);
 	array<Byte>^ a2 = gcnew array<Byte>(r->KeySize/8);
+	array<Byte>^ iv = gcnew array<Byte>(r->IV->Length);
 
 	rand->NextBytes(a1);
 	rand->NextBytes(a2);
 
-	rand->NextBytes(r->IV);
+	rand->NextBytes(iv);
 
 	MemoryStream^   msEncrypt;
     CryptoStream^   csEncrypt;
     StreamWriter^   swEncrypt;
 
-	ICryptoTransform^ enc = r->CreateEncryptor(xorArrays(a1,a2), r->IV);
+  	ICryptoTransform^ enc = r->CreateEncryptor(xorArrays(a1,a2), iv);
 
 	msEncrypt = gcnew MemoryStream();
 	csEncrypt = gcnew CryptoStream(msEncrypt, enc, System::Security::Cryptography::CryptoStreamMode::Write);
@@ -176,13 +177,14 @@ String^ BazaDanych::decryptXML(String^ encoded)//, array<Byte>^ key, array<Byte>
 
 	array<Byte>^ a1 = gcnew array<Byte>(r->KeySize/8);
 	array<Byte>^ a2 = gcnew array<Byte>(r->KeySize/8);
+	array<Byte>^ iv = gcnew array<Byte>(r->IV->Length);
 
 	rand->NextBytes(a1);
 	rand->NextBytes(a2);
 
-	rand->NextBytes(r->IV);
+	rand->NextBytes(iv);
 
-	ICryptoTransform^ dec = r->CreateDecryptor(xorArrays(a1,a2), r->IV);
+	ICryptoTransform^ dec = r->CreateDecryptor(xorArrays(a1,a2), iv);
 
 	msDecrypt = gcnew MemoryStream(encrypted);
 	csDecrypt = gcnew CryptoStream(msDecrypt, dec, System::Security::Cryptography::CryptoStreamMode::Read);
@@ -192,7 +194,6 @@ String^ BazaDanych::decryptXML(String^ encoded)//, array<Byte>^ key, array<Byte>
 
 	return plaintext;
 }
-
 vector<Strona>* BazaDanych::OdczytajListeStron(){
 	ifstream in(*filename, std::ios::in | std::ios::binary);
 	in.seekg(0, std::ios::end);
